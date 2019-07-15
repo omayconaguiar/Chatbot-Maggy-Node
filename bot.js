@@ -1,5 +1,5 @@
 const TelegramBot = require('node-telegram-bot-api'); 
-const token = '#';
+const token = '888694914:AAGDAmfqBYVdf4oZxjurh3SDpixWUz_oOBk';
 const bot = new TelegramBot(token, {polling: true});
 
 
@@ -16,7 +16,6 @@ bot.onText(/start/, (msg, match) => {
     bot.sendMessage(msg.chat.id, 'Hi. I am a simple bot. You can get the current price and blockchain height. Have fun!', opts);
 });
 
-<<<<<<< HEAD
 bot.onText(/boleto/, (msg, match) => {
     const url = 'http://www.pdf995.com/samples/pdf.pdf';
     bot.sendDocument(544663315, url);
@@ -56,9 +55,3 @@ bot.onText(/dados/, (msg, match) => {
               });
         }
         });
-=======
-bot.on('text', async (ctx) => {
-    const remoteFile = await request('http://www.lehtml.com/download/js_doc.pdf')
-    return bot.telegram.sendDocument(process.env.CHAT_ID, remoteFile, [{disable_notification: true}]);
-  })
->>>>>>> 22c5d865aaaeac9a2d18582c6d1b7fd200244a6f
