@@ -48,10 +48,9 @@ bot.onText(/dados/, (msg, match) => {
         const msg = example.message
         
         if (action == 'Telefone'){
-            bot.on('message', (msg) => {
-                const chatId = msg.chat.id;
-                // send a message to the chat acknowledging receipt of their message
-                bot.sendMessage(chatId, 'Received your message');
-              });
+            const chatId = msg.chat.id;
+            // send a message to the chat acknowledging receipt of their message
+            bot.sendMessage(chatId, 'Quer mudar para qual número?');
+            
         }
         });
