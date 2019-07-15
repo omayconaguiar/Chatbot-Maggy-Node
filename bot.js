@@ -1,5 +1,5 @@
 const TelegramBot = require('node-telegram-bot-api'); 
-const token = '#';
+const token = '888694914:AAGDAmfqBYVdf4oZxjurh3SDpixWUz_oOBk';
 const bot = new TelegramBot(token, {polling: true});
 
 
@@ -51,6 +51,6 @@ bot.onText(/dados/, (msg, match) => {
             const chatId = msg.chat.id;
             // send a message to the chat acknowledging receipt of their message
             bot.sendMessage(chatId, 'Quer mudar para qual número?');
-            
+              
         }
         });
