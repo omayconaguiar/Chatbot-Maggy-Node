@@ -1,10 +1,12 @@
 const TelegramBot = require('node-telegram-bot-api'); 
-const token = '#';
+const token = '888694914:AAGDAmfqBYVdf4oZxjurh3SDpixWUz_oOBk';
 const bot = new TelegramBot(token, {polling: true});
 
 
-bot.on('message', (msg, match) => {
+bot.once('message', (msg, match) => {
+    const chatId = msg.chat.id;
     const opts = {
+        reply_to_message_id: msg.message_id,
         reply_markup: JSON.stringify({
             keyboard: [
                 ['consultar boleto'],
@@ -13,7 +15,8 @@ bot.on('message', (msg, match) => {
             ]
         })
     };
-    bot.sendMessage(msg.chat.id, 'Eu sou Maggy, a assistente virtual da mongeral! Em que posso ajudar?', opts);
+    bot.sendMessage(chatId,'Eu sou Maggy, a assistente virtual da mongeral! Em que posso ajudar?', opts);
+    
 });
 
 bot.onText(/boleto/, (msg, match) => {
@@ -68,14 +71,14 @@ bot.onText(/dados/, (msg, match) => {
         if (action == 'Telefone'){
             const chatId = msg.chat.id;
             bot.sendMessage(chatId, 'Quer mudar para qual número?');
-            bot.on('message', (msg) => {
+            bot.once('message', (msg) => {
                 bot.sendMessage(chatId, 'Mudamos seu número senhor Maycon');
               });
         }
         else if (action == 'Endereço'){
             const chatId = msg.chat.id;
             bot.sendMessage(chatId, 'Vamos lá! Qual o seu novo endereço? No formato: (Rua, número, bairro, cidade)');
-            bot.on('message', (msg) => {
+            bot.once('message', (msg) => {
                 bot.sendMessage(chatId, 'Mudamos seu endereço senhor Maycon');
             });
         }
