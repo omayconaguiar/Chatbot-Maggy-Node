@@ -2,101 +2,85 @@ const TelegramBot = require('node-telegram-bot-api');
 const token = '888694914:AAGDAmfqBYVdf4oZxjurh3SDpixWUz_oOBk';
 const bot = new TelegramBot(token, {polling: true});
 
+var express = require('express');
+var packageInfo = require('./package.json');
 
-bot.once('message', (msg, match) => {
-    const chatId = msg.chat.id;
-    const opts = {
-        reply_to_message_id: msg.message_id,
-        reply_markup: JSON.stringify({
-            keyboard: [
-                ['consultar boleto'],
-                ['alterar dados'],
-                ['forma de pagamento']
-            ]
-        })
-    };
-    bot.sendMessage(chatId,'Eu sou Maggy, a assistente virtual da mongeral! Em que posso ajudar?', opts);
-    
+var app = express();
+
+app.get('/', function (req, res) {
+    res.json({ version: packageInfo.version });
 });
 
-bot.onText(/boleto/, (msg, match) => {
-    const url = 'http://www.pdf995.com/samples/pdf.pdf';
-    bot.sendDocument(544663315, url);
-    });
-    
-bot.onText(/dados/, (msg, match) => {
-    const opts = {
-        reply_markup: JSON.stringify({
-            inline_keyboard: [
-              [{
-                text: 'Telefone',
-                callback_data: 'Telefone'
-              }],
-              [{
-                text: 'Endereço',
-                callback_data: 'Endereço'
-              }],
-              [{
-                text: 'Email',
-                callback_data: 'Email'
-              }],
-            ],
-          }),
-      };
-      bot.sendMessage(msg.from.id, 'Escolha uma das opções abaixo', opts);
+var server = app.listen(process.env.PORT  || 5000, function () {
+    var host = server.address().address;
+    var port = server.address().port;
+
+    console.log('Web server started at http://%s:%s', host, port);
+});
+
+var mongoose = require("mongoose");
+
+var uristring = 'mongodb://localhost:27017';
+// var uristring =  process.env.MONGODB_URI;
+// mongoose.connect('mongodb://username:password@host:port/database?options...', {useNewUrlParser: true});
+
+
+mongoose.connect(uristring, function (err, res) {
+    if (err) {
+        console.log('ERROR connecting to: ' + uristring + '. ' + err);
+    } else {
+        console.log('Succeeded connected to: ' + uristring);
+    }
+});
+
+var messageSchema = new mongoose.Schema({
+    user: {
+        name: String,
+        id: Number
+    },
+    message: {
+        chat_id: String,
+        id: String,
+        text: String
+    },
+    timestamp: String
+});
+
+var Message = mongoose.model('Messages', messageSchema);
+
+module.exports = {
+    getLogs(cb) {
+    Message.find({}).exec(function (err, result) {
+        cb(result);
+    })
+    },
+
+    clearLogs(cb) {
+        Message.remove({}, cb);
+    },
+
+    addLog(user, message, cb) {
+        dbmsg = new Message({
+            user: user,
+            message: message,
+            timestamp: new Date().toISOString()
+        }).save(cb);
+    }
+}
+
+
+bot.onText('message', function (msg, match) {
+    db.addLog({
+        name: msg.from.first_name,
+        id: msg.from.id
+    }, {
+        chat_id: msg.chat.id, 
+        id: msg.message_id,
+        text: match[1]
+    })
+});
+
+bot.onText(/^\/get_logs$/, (msg, match) => {
+    db.getLogs((res) => bot.forwardMessage(msg.chat.id, el.message.chat_id, el.message.id))
     });
 
-    bot.onText(/pagamento/, (msg, match) => {
-        const opts = {
-            reply_markup: JSON.stringify({
-                inline_keyboard: [
-                [{
-                    text: 'Alterar para Boleto',
-                    callback_data: 'Alterar para Boleto'
-                }],
-                [{
-                    text: 'Alterar para Débito Automático',
-                    callback_data: 'Alterar para Débito Automático'
-                }],
-                ],
-            }),
-        };
-        bot.sendMessage(msg.from.id, 'Escolha uma das opções abaixo', opts);
-    });
-    
-    bot.on('callback_query', function onCallbackQuery(example){
-        const action = example.data // This is responsible for checking the content of callback_data
-        const msg = example.message
-        
-        if (action == 'Telefone'){
-            const chatId = msg.chat.id;
-            bot.sendMessage(chatId, 'Quer mudar para qual número?');
-            bot.once('message', (msg) => {
-                bot.sendMessage(chatId, 'Mudamos seu número senhor Maycon');
-              });
-        }
-        else if (action == 'Endereço'){
-            const chatId = msg.chat.id;
-            bot.sendMessage(chatId, 'Vamos lá! Qual o seu novo endereço? No formato: (Rua, número, bairro, cidade)');
-            bot.once('message', (msg) => {
-                bot.sendMessage(chatId, 'Mudamos seu endereço senhor Maycon');
-            });
-        }
-        else if (action == 'Email'){
-            const chatId = msg.chat.id;
-            bot.sendMessage(chatId, 'Digite o email que você quer mudar');
-            bot.on('message', (msg) => {
-                const chatId = msg.chat.id;
-                bot.sendMessage(chatId, 'Mudamos seu email senhor Maycon');
-            });
-        }
-        else if (action == 'Alterar para Boleto'){
-            const chatId = msg.chat.id;
-            bot.sendMessage(chatId, 'Mudamos');
-        }
-        else{
-            const chatId = msg.chat.id;
-            bot.sendMessage(chatId, 'Mudamos');        
-        }
-
-    }); 
