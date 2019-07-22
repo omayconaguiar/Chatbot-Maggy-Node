@@ -2,6 +2,34 @@ const TelegramBot = require('node-telegram-bot-api');
 const token = '888694914:AAGDAmfqBYVdf4oZxjurh3SDpixWUz_oOBk';
 const bot = new TelegramBot(token, {polling: true});
 
+const mongoose = require("mongoose");
+
+const uristring = 'mongodb://localhost:27017';
+
+
+mongoose.connect(uristring, function (err, res) {
+    if (err) {
+        console.log('ERROR connecting to: ' + uristring + '. ' + err);
+    } else {
+        console.log('Succeeded connected to: ' + uristring);
+    }
+});
+
+
+var messageSchema = new mongoose.Schema({
+    user: {
+        name: String,
+        id: Number
+    },
+    message: {
+        chat_id: String,
+        id: String,
+        text: String
+    },
+    timestamp: String
+});
+
+var Message = mongoose.model('Messages', messageSchema);
 
 bot.once('message', (msg, match) => {
     const chatId = msg.chat.id;
@@ -17,6 +45,35 @@ bot.once('message', (msg, match) => {
     };
     bot.sendMessage(chatId,'Eu sou Maggy, a assistente virtual da mongeral! Em que posso ajudar?', opts);
     
+});
+bot.onText(/save/,(msg,match)=>{
+    dbmsg = new Message({
+        user: {
+            name: msg.from.first_name,
+            id: msg.from.id
+        },
+        message: {
+            chat_id: msg.chat.id, 
+            id: msg.message_id,
+            text: msg.text
+        },
+        timestamp: new Date().toISOString()         
+     }).save(console.log);
+});
+
+bot.onText(/list/,(msg,match) => {
+
+    Message.find(function (err, messages) {
+        if (err) return console.error(err);
+        console.log(messages);
+      })
+      
+
+    Message.find({}, (a,b) => {
+        console.log(59,a);
+        console.log(60,b);
+        // bot.forwardMessage(msg.chat.id, result); // .message.chat_id, result.message.id);
+    });
 });
 
 bot.onText(/boleto/, (msg, match) => {
