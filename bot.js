@@ -31,6 +31,11 @@ var messageSchema = new mongoose.Schema({
 
 var Message = mongoose.model('Messages', messageSchema);
 
+bot.onText( /\/echo (.*)/, ( msg, match ) => {
+    console.log( `echo msg: `, msg ) 
+    console.log( `echo match: `, match ) 
+})
+
 bot.once('message', (msg, match) => {
     const chatId = msg.chat.id;
     const opts = {
@@ -46,7 +51,7 @@ bot.once('message', (msg, match) => {
     bot.sendMessage(chatId,'Eu sou Maggy, a assistente virtual da mongeral! Em que posso ajudar?', opts);
     
 });
-bot.onText(/save/,(msg,match)=>{
+bot.on('message',(msg,match)=>{
     dbmsg = new Message({
         user: {
             name: msg.from.first_name,
@@ -125,12 +130,33 @@ bot.onText(/dados/, (msg, match) => {
         const action = example.data // This is responsible for checking the content of callback_data
         const msg = example.message
         
+       
+
         if (action == 'Telefone'){
             const chatId = msg.chat.id;
             bot.sendMessage(chatId, 'Quer mudar para qual número?');
             bot.once('message', (msg) => {
-                bot.sendMessage(chatId, 'Mudamos seu número senhor Maycon');
+                bot.sendMessage(msg.from.id, "Confirma o número " + msg.text + "?");
+                    const opts = {
+                        reply_markup: JSON.stringify({
+                            inline_keyboard: [
+                            [{
+                                text: '👍',
+                                callback_data: 'sim'
+                            }],
+                            [{
+                                text: '👎',
+                                callback_data: 'nao'
+                            }],
+                            ],
+                        }),
+                    };
+                    bot.sendMessage(msg.from.id, 'Escolha sim ou não.', opts);
+                    if((action=='sim')||(action=='nao')){
+                        bot.sendMessage(msg.from.id, 'Mudamos maycon');        
+                    };
               });
+            
         }
         else if (action == 'Endereço'){
             const chatId = msg.chat.id;
@@ -144,9 +170,28 @@ bot.onText(/dados/, (msg, match) => {
             bot.sendMessage(chatId, 'Digite o email que você quer mudar');
             bot.on('message', (msg) => {
                 const chatId = msg.chat.id;
-                bot.sendMessage(chatId, 'Mudamos seu email senhor Maycon');
-            });
-        }
+                bot.sendMessage(msg.from.id, "Confirma o email " + msg.text + "?");
+                const opts = {
+                    reply_markup: JSON.stringify({
+                        inline_keyboard: [
+                        [{
+                            text: '👍',
+                            callback_data: 'sim'
+                        }],
+                        [{
+                            text: '👎',
+                            callback_data: 'nao'
+                        }],
+                        ],
+                    }),
+                };
+                bot.sendMessage(msg.from.id, 'Escolha sim ou não.', opts);
+                if((action=='sim')||(action=='nao')){
+                    bot.sendMessage(msg.from.id, 'Mudamos maycon');        
+                };
+          });
+        
+    }
         else if (action == 'Alterar para Boleto'){
             const chatId = msg.chat.id;
             bot.sendMessage(chatId, 'Mudamos');
