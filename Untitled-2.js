@@ -73,11 +73,33 @@ app.get('message', (req, res) => {
     })
 })
 
+addLog(user, message, cb) {
+    dbmsg = new Message({
+        user: user,
+        message: message,
+        timestamp: new Date().toISOString()
+    }).save(cb);
+}
+
 app.post('message', (req, res) => {
+    bot.onText(/^(.+)$/, function (msg, match) {
+        db.addLog({
+            name: msg.from.first_name,
+            id: msg.from.id
+        }
+        chat_id: msg.chat.id, 
+        id: msg.message_id,
+        text: match[1]
+    const message = new Message({chat_id:,id:"1213",name:"maycon"})
     db.collection('data').save(req.body, (err, result) => {
         if (err) return console.log(err)
 
         console.log('Salvo no Banco de Dados')
         res.redirect('/show')
+
+        // const Cat = mongoose.model('Cat', { name: String });
+
+        // const kitty = new Cat({ name: 'Zildjian' });
+        // kitty.save().then(() => console.log('meow'));
     })
 })

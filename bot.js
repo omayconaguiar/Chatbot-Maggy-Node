@@ -1,6 +1,7 @@
 const TelegramBot = require('node-telegram-bot-api'); 
 const token = '888694914:AAGDAmfqBYVdf4oZxjurh3SDpixWUz_oOBk';
 const bot = new TelegramBot(token, {polling: true});
+const cepPromise = require("cep-promise")
 
 const mongoose = require("mongoose");
 
@@ -30,11 +31,6 @@ var messageSchema = new mongoose.Schema({
 });
 
 var Message = mongoose.model('Messages', messageSchema);
-
-bot.onText( /\/echo (.*)/, ( msg, match ) => {
-    console.log( `echo msg: `, msg ) 
-    console.log( `echo match: `, match ) 
-})
 
 bot.once('message', (msg, match) => {
     const chatId = msg.chat.id;
@@ -160,9 +156,10 @@ bot.onText(/dados/, (msg, match) => {
         }
         else if (action == 'Endereço'){
             const chatId = msg.chat.id;
-            bot.sendMessage(chatId, 'Vamos lá! Qual o seu novo endereço? No formato: (Rua, número, bairro, cidade)');
-            bot.once('message', (msg) => {
-                bot.sendMessage(chatId, 'Mudamos seu endereço senhor Maycon');
+            bot.sendMessage(chatId, 'Vamos lá! Qual o seu novo cep (formato 66666666)?');
+            bot.on('message', (msg) => {
+                cepPromise(msg.text)
+                .then(bot.sendMessage(msg.from.id, + msg.text));
             });
         }
         else if (action == 'Email'){
@@ -171,34 +168,37 @@ bot.onText(/dados/, (msg, match) => {
             bot.on('message', (msg) => {
                 const chatId = msg.chat.id;
                 bot.sendMessage(msg.from.id, "Confirma o email " + msg.text + "?");
-                const opts = {
-                    reply_markup: JSON.stringify({
-                        inline_keyboard: [
-                        [{
-                            text: '👍',
-                            callback_data: 'sim'
-                        }],
-                        [{
-                            text: '👎',
-                            callback_data: 'nao'
-                        }],
-                        ],
-                    }),
-                };
-                bot.sendMessage(msg.from.id, 'Escolha sim ou não.', opts);
-                if((action=='sim')||(action=='nao')){
-                    bot.sendMessage(msg.from.id, 'Mudamos maycon');        
-                };
-          });
-        
-    }
+             const opts = {
+                        reply_markup: JSON.stringify({
+                            inline_keyboard: [
+                            [{
+                                text: '👍',
+                                callback_data: 'sim'
+                            }],
+                            [{
+                                text: '👎',
+                                callback_data: 'nao'
+                            }],
+                            ],
+                        }),
+                    };
+                    bot.sendMessage(msg.from.id, 'Escolha sim ou não.', opts);
+                    if((action=='sim')||(action=='nao')){
+                        bot.sendMessage(msg.from.id, 'Mudamos maycon');        
+                    };
+              });
+            
+        }
         else if (action == 'Alterar para Boleto'){
             const chatId = msg.chat.id;
             bot.sendMessage(chatId, 'Mudamos');
+        }
+        else if (action == 'Alterar para Débito Automático'){
+            const chatId = msg.chat.id;
+            bot.sendMessage(chatId, 'Mudamos');        
         }
         else{
             const chatId = msg.chat.id;
             bot.sendMessage(chatId, 'Mudamos');        
         }
-
     }); 
