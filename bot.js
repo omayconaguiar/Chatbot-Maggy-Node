@@ -1,5 +1,5 @@
 const TelegramBot = require('node-telegram-bot-api'); 
-const token = '888694914:AAGDAmfqBYVdf4oZxjurh3SDpixWUz_oOBk';
+const token = '#';
 const bot = new TelegramBot(token, {polling: true});
 const cepPromise = require("cep-promise")
 
@@ -201,4 +201,9 @@ bot.onText(/dados/, (msg, match) => {
             const chatId = msg.chat.id;
             bot.sendMessage(chatId, 'Mudamos');        
         }
+<<<<<<< HEAD
     }); 
+=======
+
+    }); 
+>>>>>>> 768cf5a43f68d065b8df8a7982ab9500284d0d8b
