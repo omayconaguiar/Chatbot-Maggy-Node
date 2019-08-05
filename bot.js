@@ -101,7 +101,7 @@ bot.onText(/list/,(msg,match) => {
 });
 
 bot.onText(/boleto/, (msg, match) => {
-    const url = 'http://www.pdf995.com/samples/pdf.pdf';
+    const url = 'http://www.credfaz.org.br/Arquivos/formularios-uteis/prop-adesao-prestamista.pdf';
     bot.sendDocument(544663315, url);
     });
     
@@ -199,6 +199,22 @@ bot.onText(/dados/, (msg, match) => {
                 .then((console.log));
             });
         }
+        // else if (action == 'Endereço'){
+        //     const chatId = msg.chat.id;
+        //     bot.sendMessage(chatId, 'Vamos lá! Qual o seu novo cep (formato 12345678)?');
+        //     bot.on('message', (msg) => {
+        //         command = msg['text'].split(' ')
+        //         if (command[0] == '/cep'){
+        //             cep = command[1]
+        //             api = "https://viacep.com.br/ws/"+cep+"/json/unicode/" 
+        //             r = requests.get(api)
+        //             results = json.loads(r.content)
+        //             print(results)
+        //             txt = 'Consulta de CEP e IBGE no Telegram:\n{Criado por Dkr e Tesla.}\n\nCep: '+results['cep']+'\nLogradouro: '+results['logradouro']+'\nComplemento: '+results['complemento']+'\nBairro: '+results['bairro']+'\nLocalidade: '+results['localidade']+'\nUF: '+results['uf']+'\nIBGE: '+results['ibge']
+        //             bot.sendMessage(msg.from.id, txt) 
+        //         };
+        //     });
+        // }
         else if (action == 'Email'){
                const chatId = msg.chat.id;
             bot.sendMessage(chatId, 'Digite o email que quer mudar');
@@ -252,15 +268,15 @@ bot.onText(/dados/, (msg, match) => {
         }
         else if (action == 'confirmo'||action == 'Nao confirmo'){
             const chatId = msg.chat.id;
-            bot.sendMessage(chatId, 'Mudamos seu telefone.');        
+            bot.once.sendMessage(chatId, 'Mudamos seu telefone.');        
         }
         else if (action == 'Mudar'||action == 'Nao mudar'){
             const chatId = msg.chat.id;
-            bot.sendMessage(chatId, 'Mudamos seu email.');        
+            bot.once.sendMessage(chatId, 'Mudamos seu email.');        
         }
         else if (action == 'Segunda 12h'||action == 'Segunda 18h'){
             const chatId = msg.chat.id;
-            bot.sendMessage(chatId, 'Agendamos nesse horário.');        
+            bot.once.sendMessage(chatId, 'Agendamos nesse horário.');        
         }
        else{
              const chatId = msg.chat.id;
@@ -280,4 +296,5 @@ bot.onText(/dados/, (msg, match) => {
         if (msg.text.includes(dados)) {
             bot.sendMessage(msg.chat.id, "Prêmio é a taxa que você paga.");
         }
+        
     });
