@@ -8,6 +8,12 @@ var packageInfo = require('./package.json');
 
 var app = express();
 
+async function cep_async(text) {
+    res = await cepPromise(text);
+    console.log(13, res);
+    return res;               
+}
+
 app.get('/', function (req, res) {
     res.json({ version: packageInfo.version });
 });
@@ -101,8 +107,8 @@ bot.onText(/list/,(msg,match) => {
 });
 
 bot.onText(/boleto/, (msg, match) => {
-    const url = 'http://www.credfaz.org.br/Arquivos/formularios-uteis/prop-adesao-prestamista.pdf';
-    bot.sendDocument(544663315, url);
+    var document = __dirname+'/./boletomongeral.pdf';
+    bot.sendDocument(544663315, document);
     });
     
 bot.onText(/dados/, (msg, match) => {
@@ -193,10 +199,15 @@ bot.onText(/dados/, (msg, match) => {
 
         else if (action == 'Endereço'){
             const chatId = msg.chat.id;
-            bot.sendMessage(chatId, 'Vamos lá! Qual o seu novo cep (formato 66666666)?');
+            bot.sendMessage(chatId, 'Vamos lá! Qual o seu novo cep (formato 12345678)?');
             bot.on('message', (msg) => {
                 cepPromise(msg.text)
-                .then((console.log));
+                .then((cep_data,err)=>{
+                    bot.sendMessage(msg.from.id, `Rua ${cep_data.street} e bairro ${cep_data.neighborhood}`);
+                    console.log(207, cep_data.street, err);
+                });
+                // console.log(209);
+                // bot.sendMessage(msg.from.id, "210....");
             });
         }
         // else if (action == 'Endereço'){
