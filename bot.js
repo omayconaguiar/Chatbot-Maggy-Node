@@ -203,29 +203,27 @@ bot.onText(/dados/, (msg, match) => {
             bot.on('message', (msg) => {
                 cepPromise(msg.text)
                 .then((cep_data,err)=>{
-                    bot.sendMessage(msg.from.id, `Rua ${cep_data.street} e bairro ${cep_data.neighborhood}`);
-                    console.log(207, cep_data.street, err);
+                    bot.sendMessage(msg.from.id, `Rua: ${cep_data.street}\nBairro: ${cep_data.neighborhood}\nEstado: ${cep_data.state}\nCidade: ${cep_data.city}`);
                 });
-                // console.log(209);
-                // bot.sendMessage(msg.from.id, "210....");
             });
+            bot.on('message', (msg, match) => {
+                const opts = {
+                    reply_markup: JSON.stringify({
+                        inline_keyboard: [
+                        [{
+                            text: 'sim',
+                            callback_data: 'sim'
+                        }],
+                        [{
+                            text: 'não é',
+                            callback_data: 'não é'
+                        }],
+                        ],
+                    }),
+                };
+                bot.sendMessage(msg.from.id, "Confirma o endereço?",opts);
+            });  
         }
-        // else if (action == 'Endereço'){
-        //     const chatId = msg.chat.id;
-        //     bot.sendMessage(chatId, 'Vamos lá! Qual o seu novo cep (formato 12345678)?');
-        //     bot.on('message', (msg) => {
-        //         command = msg['text'].split(' ')
-        //         if (command[0] == '/cep'){
-        //             cep = command[1]
-        //             api = "https://viacep.com.br/ws/"+cep+"/json/unicode/" 
-        //             r = requests.get(api)
-        //             results = json.loads(r.content)
-        //             print(results)
-        //             txt = 'Consulta de CEP e IBGE no Telegram:\n{Criado por Dkr e Tesla.}\n\nCep: '+results['cep']+'\nLogradouro: '+results['logradouro']+'\nComplemento: '+results['complemento']+'\nBairro: '+results['bairro']+'\nLocalidade: '+results['localidade']+'\nUF: '+results['uf']+'\nIBGE: '+results['ibge']
-        //             bot.sendMessage(msg.from.id, txt) 
-        //         };
-        //     });
-        // }
         else if (action == 'Email'){
                const chatId = msg.chat.id;
             bot.sendMessage(chatId, 'Digite o email que quer mudar');
@@ -288,6 +286,13 @@ bot.onText(/dados/, (msg, match) => {
         else if (action == 'Segunda 12h'||action == 'Segunda 18h'){
             const chatId = msg.chat.id;
             bot.once.sendMessage(chatId, 'Agendamos nesse horário.');        
+        }
+        else if (action == 'sim'||action == 'não é'){
+            const chatId = msg.chat.id;
+            bot.once.sendMessage(chatId, 'Digite o número da casa e o complemento.');        
+            bot.on('message', (msg, match) => {
+                bot.once.sendMessage(chatId, 'Mudamos seu endereço.');        
+            }); 
         }
        else{
              const chatId = msg.chat.id;
