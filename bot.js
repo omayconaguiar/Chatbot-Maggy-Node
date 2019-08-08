@@ -72,7 +72,6 @@ bot.once('message', (msg, match) => {
             ]
         })
     };
-    bot.sendMessage(chatId,'Eu sou Maggy, a assistente virtual da mongeral! Em que posso ajudar?', opts);   
 });
 
 bot.on('message', (msg, match) => {
@@ -298,8 +297,87 @@ bot.onText(/dados/, (msg, match) => {
     }); 
 
     bot.on('message', (msg) => {
-        var Hi = "a";
-        if (msg.text.toString().toLowerCase().includes(Hi)) {
-            bot.sendMessage(msg.chat.id, "Erro");
-        }
+        var oi = "oi";
+        var eae = "eae";
+        var fala = "fala";
+        var como = "como";
+        var ola = "ola";
+        var mag = "mag";
+        var maggy = "maggy";
+        var tudo = "tudo";
+        var ajuda = "ajuda";
+        var hey = "hey";
+        var ei = "ei";
+        var oie = "oie";
+        var oii = "oii";
+        var oiii = "oiii";
+        var boleto = "boleto";
+        var dados = "dados";
+        var pagamento = "pagamento";
+        var outros = "outros";
+        var numero = "numero";
+
+        if (msg.text.toString().toLowerCase().includes(oi)) {
+            bot.sendMessage(msg.chat.id, "Eu sou Maggy, a assistente virtual da mongeral! Em que posso ajudar?");
+        }        
+        else if(msg.text.toString().toLowerCase().includes(eae)){
+            bot.sendMessage(msg.chat.id, "Eu sou Maggy, a assistente virtual da mongeral! Em que posso ajudar?");
+        } 
+        else if(msg.text.toString().toLowerCase().includes(como)){
+            bot.sendMessage(msg.chat.id, "Eu sou Maggy, a assistente virtual da mongeral! Em que posso ajudar?");
+        } 
+        else if(msg.text.toString().toLowerCase().includes(fala)){
+            bot.sendMessage(msg.chat.id, "Eu sou Maggy, a assistente virtual da mongeral! Em que posso ajudar?");
+        } 
+        else if(msg.text.toString().toLowerCase().includes(ola)){
+            bot.sendMessage(msg.chat.id, "Eu sou Maggy, a assistente virtual da mongeral! Em que posso ajudar?");
+        } 
+        else if(msg.text.toString().toLowerCase().includes(mag)){
+            bot.sendMessage(msg.chat.id, "Eu sou Maggy, a assistente virtual da mongeral! Em que posso ajudar?");
+        } 
+        else if(msg.text.toString().toLowerCase().includes(maggy)){
+            bot.sendMessage(msg.chat.id, "Eu sou Maggy, a assistente virtual da mongeral! Em que posso ajudar?");
+        } 
+        else if(msg.text.toString().toLowerCase().includes(tudo)){
+            bot.sendMessage(msg.chat.id, "Eu sou Maggy, a assistente virtual da mongeral! Em que posso ajudar?");
+        } 
+        else if(msg.text.toString().toLowerCase().includes(ajuda)){
+            bot.sendMessage(msg.chat.id, "Eu sou Maggy, a assistente virtual da mongeral! Em que posso ajudar?");
+        } 
+        else if(msg.text.toString().toLowerCase().includes(hey)){
+            bot.sendMessage(msg.chat.id, "Eu sou Maggy, a assistente virtual da mongeral! Em que posso ajudar?");
+        } 
+        else if(msg.text.toString().toLowerCase().includes(ei)){
+            bot.sendMessage(msg.chat.id, "Eu sou Maggy, a assistente virtual da mongeral! Em que posso ajudar?");
+        } 
+        else if(msg.text.toString().toLowerCase().includes(oie)){
+            bot.sendMessage(msg.chat.id, "Eu sou Maggy, a assistente virtual da mongeral! Em que posso ajudar?");
+        } 
+        else if(msg.text.toString().toLowerCase().includes(oii)){
+            bot.sendMessage(msg.chat.id, "Eu sou Maggy, a assistente virtual da mongeral! Em que posso ajudar?");
+        } 
+        else if(msg.text.toString().toLowerCase().includes(oiii)){
+            bot.sendMessage(msg.chat.id, "Eu sou Maggy, a assistente virtual da mongeral! Em que posso ajudar?");
+        } 
+        else if(msg.text.toString().toLowerCase().includes(oiii)){
+            bot.sendMessage(msg.chat.id, "Eu sou Maggy, a assistente virtual da mongeral! Em que posso ajudar?");
+        } 
+        else if(msg.text.toString().toLowerCase().includes(boleto)){
+            bot.sendMessage(msg.chat.id, "Está aqui seu boleto!");
+        } 
+        else if(msg.text.toString().toLowerCase().includes(dados)){
+            bot.sendMessage(msg.chat.id, "Está aqui seus dados!");
+        } 
+        else if(msg.text.toString().toLowerCase().includes(pagamento)){
+            bot.sendMessage(msg.chat.id, "Está aqui sua forma de pagamento!");
+        } 
+        else if(msg.text.toString().toLowerCase().includes(outros)){
+            bot.sendMessage(msg.chat.id, "Está aqui os outros!");
+        } 
+        else{
+            const chatId = msg.chat.id;     
+            bot.sendMessage(chatId,'Não consegui entender o que você disse, qualquer coisa clique nos menus para obter as funcionalidades.');   
+        }        
     });
+
+   
