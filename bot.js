@@ -58,7 +58,7 @@ var messageSchema = new mongoose.Schema({
 
 var Message = mongoose.model('Messages', messageSchema);
 
-bot.once('message', (msg, match) => {
+bot.on('message', (msg, match) => {
     const chatId = msg.chat.id;
     const opts = {
         reply_to_message_id: msg.message_id,
@@ -105,7 +105,7 @@ bot.onText(/list/,(msg,match) => {
 
 bot.onText(/boleto/, (msg, match) => {
     var document = __dirname+'/./boletomongeral.pdf';
-    bot.sendDocument(544663315, document);
+    bot.sendDocument(msg.chat.id, document);
     });
 
     
@@ -126,13 +126,10 @@ bot.onText(/dados/, (msg, match) => {
                 callback_data: 'Email'
               }],
             ],
-          }),
+        })
     };
     bot.sendMessage(msg.from.id, 'Escolha uma das opções abaixo', opts);
 
-    // Tratar telefone aqui
-    // Tratar Endereco aqui
-    // Tratar email aqui
 });
 
 bot.onText(/pagamento/, (msg, match) => {
@@ -172,17 +169,15 @@ bot.onText(/outros/, (msg, match) => {
     bot.sendMessage(msg.from.id, 'Se você não conseguiu resolver seus problemas, pode marcar uma conversa com a nossa central de atendimento.', opts);    
 });
 
-    // Trata os botões
-    bot.on('callback_query', function onCallbackQuery(example){
-        const action = example.data // This is responsible for checking the content of callback_data
-        const msg = example.message
-        
-      
-        if (action == 'Telefone'){
-            const chatId = msg.chat.id;
-            bot.sendMessage(chatId, 'Quer mudar para qual número?');
+
+// Trata os botões
+bot.on('callback_query', (callback_query) =>{
+    const action = callback_query.data;
+    const msg = callback_query.message;
+    switch (action){
+        case 'Telefone' :
+            bot.sendMessage(msg.chat.id, 'Quer mudar para qual número?');
             bot.onText(/[\(\)\d\-\.\s]{8,}/, (msg, match) => {
-            // bot.on('message', (msg, match) => {
                 const opts = {
                     reply_markup: JSON.stringify({
                         inline_keyboard: [
@@ -206,11 +201,10 @@ bot.onText(/outros/, (msg, match) => {
                         bot.sendMessage(msg2.chat.id, "Confirmado, mudamos seu número.");
                     }
                 })
-            });  
-        }
-        else if (action == 'Email'){
-            const chatId = msg.chat.id;
-            bot.sendMessage(chatId, 'Digite o email que quer mudar');
+            });
+            break;
+            case 'Email' :
+                bot.sendMessage(msg.chat.id, 'Digite o email que quer mudar');
                 bot.onText(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/, (msg, match) => {
                     const opts = {
                         reply_markup: JSON.stringify({
@@ -227,7 +221,7 @@ bot.onText(/outros/, (msg, match) => {
                         }),
                     };
                     bot.sendMessage(msg.from.id, "Confirma o email " + msg.text + "?",opts);
-                    
+                        
                     bot.on('callback_query', function onCallbackQuery(confirma){
                         const action = confirma.data
                         const msg2 = confirma.message
@@ -236,60 +230,55 @@ bot.onText(/outros/, (msg, match) => {
                             bot.sendMessage(msg2.chat.id, "Confirmamos o email.");
                         }
                     })
-                });     
-        }
-         else if (action == 'Endereço'){
-            const chatId = msg.chat.id;
-            bot.sendMessage(chatId, 'Vamos lá! Qual o seu novo cep (formato 12345678)?');
-            bot.onText(/[0-9]{5}-[\d]{3}/, (msg) => {
-                cepPromise(msg.text)
-                .then((cep_data,err)=>{
-                    bot.sendMessage(msg.from.id, `Rua: ${cep_data.street}\nBairro: ${cep_data.neighborhood}\nEstado: ${cep_data.state}\nCidade: ${cep_data.city}`);
+                });   
+            break;
+            case 'Endereço':
+                bot.sendMessage(msg.chat.id, 'Vamos lá! Qual o seu novo cep (formato 12345678)?');
+                bot.onText(/[0-9]{5}-[\d]{3}/, (msg) => {
+                    cepPromise(msg.text)
+                    .then((cep_data,err)=>{
+                        bot.sendMessage(msg.from.id, `Rua: ${cep_data.street}\nBairro: ${cep_data.neighborhood}\nEstado: ${cep_data.state}\nCidade: ${cep_data.city}`);
+                    });
                 });
-            });
-            bot.once('message', (msg, match) => {
-                const opts = {
-                    reply_markup: JSON.stringify({
-                        inline_keyboard: [
-                        [{
-                            text: 'Sim',
-                            callback_data: 'Sim'
-                        }],
-                        [{
-                            text: 'Não',
-                            callback_data: 'Não'
-                        }],
-                        ],
-                    }),
-                };
-                bot.sendMessage(msg.from.id, "Confirma o endereço?",opts);
-
-                bot.on('callback_query', function onCallbackQuery(confirma){
-                    const action = confirma.data
-                    const msg2 = confirma.message
-
-                    if (action == "Sim"){
-                        bot.sendMessage(msg2.chat.id, "Digite o número da casa");
-                    }
-                })
-                bot.on('message', (msg, match) => {
-                    const chatId = msg.chat.id;
-                    bot.sendMessage(chatId, 'Mudamos seu endereco'); 
+                bot.once('message', (msg, match) => {
+                    const opts = {
+                        reply_markup: JSON.stringify({
+                            inline_keyboard: [
+                            [{
+                                text: 'Sim',
+                                callback_data: 'Sim'
+                            }],
+                            [{
+                                text: 'Não',
+                                callback_data: 'Não'
+                            }],
+                            ],
+                        }),
+                    };
+                    bot.sendMessage(msg.from.id, "Confirma o endereço?",opts);
+    
+                    bot.on('callback_query', function onCallbackQuery(confirma){
+                        const action = confirma.data
+                        const msg2 = confirma.message
+    
+                        if (action == "Sim"){
+                            bot.sendMessage(msg2.chat.id, "Digite o número da casa");
+                        }
+                    })
+                    bot.on('message', (msg, match) => {
+                        const chatId = msg.chat.id;
+                        bot.sendMessage(chatId, 'Mudamos seu endereco'); 
+                    });
                 });
-            });
-            
-        }
-        else if (action == 'Alterar para Boleto'){
-            const chatId = msg.chat.id;
-            bot.sendMessage(chatId, 'Mudamos sua forma de pagamento para boleto');
-        }
-        else if (action == 'Alterar para Débito Automático'){
-            const chatId = msg.chat.id;
-            bot.sendMessage(chatId, 'Mudamos sua forma de pagamento para débito automático');        
-        }
-        else if(action == 'beleza'||action == 'no'){
-            const chatId = msg.chat.id;
-            bot.sendMessage(chatId, 'Pode essa semana?');
+            break;
+        case 'Alterar para Boleto':
+            bot.sendMessage(msg.chat.id, 'Mudamos sua forma de pagamento para boleto');
+            break;
+        case 'Alterar para Débito Automático':
+            bot.sendMessage(msg.chat.id, 'Mudamos sua forma de pagamento para débito automático'); 
+            break;
+        case 'beleza':
+            bot.sendMessage(msg.chat.id, 'Pode essa semana?');
             bot.on('message', (msg, match) => {
                 const opts = {
                     reply_markup: JSON.stringify({
@@ -320,11 +309,27 @@ bot.onText(/outros/, (msg, match) => {
                     }
                 })
             });
+            break;
         }
+    });
 
-    }); 
-
+    Array.prototype.shuffle = function() {
+        var input = this;
+         
+        for (var i = input.length-1; i >=0; i--) {
+         
+            var randomIndex = Math.floor(Math.random()*(i+1)); 
+            var itemAtIndex = input[randomIndex]; 
+             
+            input[randomIndex] = input[i]; 
+            input[i] = itemAtIndex;
+        }
+        return input;
+    }
+     
+    
     bot.on('message', (msg) => {
+        //bem vindo
         var oi = "oi";
         var eae = "eae";
         var fala = "fala";
@@ -339,10 +344,12 @@ bot.onText(/outros/, (msg, match) => {
         var oie = "oie";
         var oii = "oii";
         var oiii = "oiii";
+        //funcoes
         var boleto = "boleto";
         var dados = "dados";
         var pagamento = "pagamento";
         var outros = "outros";
+        //numeros
         var um = "1";
         var dois = "2";
         var tres = "3";
