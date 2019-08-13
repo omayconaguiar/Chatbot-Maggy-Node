@@ -8,6 +8,7 @@ var packageInfo = require('./package.json');
 
 var app = express();
 
+
 async function cep_async(text) {
     res = await cepPromise(text);
     console.log(13, res);
@@ -71,6 +72,7 @@ bot.on('message', (msg, match) => {
             ]
         })
     };
+    bot.sendMessage(chatId,'', opts);   
 });
 
 bot.on('message', (msg, match) => {
@@ -156,11 +158,11 @@ bot.onText(/outros/, (msg, match) => {
         reply_markup: JSON.stringify({
             inline_keyboard: [
             [{
-                text: 'beleza',
+                text: '👍',
                 callback_data: 'beleza'
             }],
             [{
-                text: 'nao',
+                text: '👎',
                 callback_data: 'nao'
             }],
             ],
@@ -182,11 +184,11 @@ bot.on('callback_query', (callback_query) =>{
                     reply_markup: JSON.stringify({
                         inline_keyboard: [
                         [{
-                            text: 'confirmo',
+                            text: '👍',
                             callback_data: 'confirmo'
                         }],
                         [{
-                            text: 'Nao confirmo',
+                            text: '👎',
                             callback_data: 'Nao confirmo'
                         }],
                         ],
@@ -200,6 +202,9 @@ bot.on('callback_query', (callback_query) =>{
                     if (action == "confirmo"){
                         bot.sendMessage(msg2.chat.id, "Confirmado, mudamos seu número.");
                     }
+                    else if(action == 'Nao confirmo'){
+                        bot.sendMessage(msg2.chat.id, "Tente novamente mais tarde.");
+                    }
                 })
             });
             break;
@@ -210,11 +215,11 @@ bot.on('callback_query', (callback_query) =>{
                         reply_markup: JSON.stringify({
                             inline_keyboard: [
                             [{
-                                text: 'Mudar',
+                                text: '👍',
                                 callback_data: 'Mudar'
                             }],
                             [{
-                                text: 'Nao mudar',
+                                text: '👎',
                                 callback_data: 'Nao mudar'
                             }],
                             ],
@@ -229,47 +234,51 @@ bot.on('callback_query', (callback_query) =>{
                         if (action == "Mudar"){
                             bot.sendMessage(msg2.chat.id, "Confirmamos o email.");
                         }
+                        else if (action == "Não Mudar"){
+                        bot.sendMessage(msg2.chat.id, "Tente novamente mais tarde.");
+                        }
                     })
                 });   
             break;
             case 'Endereço':
-                bot.sendMessage(msg.chat.id, 'Vamos lá! Qual o seu novo cep (formato 12345678)?');
-                bot.onText(/[0-9]{5}-[\d]{3}/, (msg) => {
+                bot.sendMessage(msg.chat.id, 'Vamos lá! Qual o seu novo cep (formato 12345-678)?');
+                bot.onText(/[0-9]{5}-[\d]{3}/, (msg, match) => {
                     cepPromise(msg.text)
                     .then((cep_data,err)=>{
                         bot.sendMessage(msg.from.id, `Rua: ${cep_data.street}\nBairro: ${cep_data.neighborhood}\nEstado: ${cep_data.state}\nCidade: ${cep_data.city}`);
                     });
                 });
-                bot.once('message', (msg, match) => {
+                bot.onText(/[0-9]{5}-[\d]{3}/, (msg, match) => {
                     const opts = {
                         reply_markup: JSON.stringify({
                             inline_keyboard: [
                             [{
-                                text: 'Sim',
+                                text: '👍',
                                 callback_data: 'Sim'
                             }],
                             [{
-                                text: 'Não',
+                                text: '👎',
                                 callback_data: 'Não'
                             }],
                             ],
                         }),
                     };
                     bot.sendMessage(msg.from.id, "Confirma o endereço?",opts);
-    
                     bot.on('callback_query', function onCallbackQuery(confirma){
                         const action = confirma.data
                         const msg2 = confirma.message
     
                         if (action == "Sim"){
-                            bot.sendMessage(msg2.chat.id, "Digite o número da casa");
+                            bot.sendMessage(msg2.chat.id, "Digite o número do complemento");
+                            bot.onText(/^[0-9]{1,4}$/, (msg, match) => {
+                               bot.sendMessage(msg2.chat.id,'Mudamos seu endereco'); 
+                        });
                         }
-                    })
-                    bot.on('message', (msg, match) => {
-                        const chatId = msg.chat.id;
-                        bot.sendMessage(chatId, 'Mudamos seu endereco'); 
-                    });
-                });
+                        else if(action == 'Não'){
+                            bot.sendMessage(msg2.chat.id, "Tente novamente mais tarde.");
+                         };                 
+                })
+            });
             break;
         case 'Alterar para Boleto':
             bot.sendMessage(msg.chat.id, 'Mudamos sua forma de pagamento para boleto');
@@ -310,23 +319,11 @@ bot.on('callback_query', (callback_query) =>{
                 })
             });
             break;
+            
         }
     });
 
-    Array.prototype.shuffle = function() {
-        var input = this;
-         
-        for (var i = input.length-1; i >=0; i--) {
-         
-            var randomIndex = Math.floor(Math.random()*(i+1)); 
-            var itemAtIndex = input[randomIndex]; 
-             
-            input[randomIndex] = input[i]; 
-            input[i] = itemAtIndex;
-        }
-        return input;
-    }
-     
+  
     
     bot.on('message', (msg) => {
         //bem vindo
