@@ -286,7 +286,7 @@ bot.on('callback_query', (callback_query) =>{
             break;
         case 'beleza':
             bot.sendMessage(msg.chat.id, 'Pode essa semana?');
-            bot.onText(/^[-a-z]+$/, (msg, match) => {
+            bot.onText(/^[-a-z-A-Z]+$/, (msg, match) => {
                 const opts = {
                     reply_markup: JSON.stringify({
                         inline_keyboard: [
