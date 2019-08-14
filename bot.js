@@ -176,7 +176,7 @@ bot.on('callback_query', (callback_query) =>{
     const msg = callback_query.message;
     switch (action){
         case 'Telefone' :
-            bot.sendMessage(msg.chat.id, 'Quer mudar para qual número?');
+            bot.sendMessage(msg.chat.id, 'Quer mudar para qual número? Formato: (21)2767-3969');
             bot.onText(/^(?:(?:\+|00)?(55)\s?)?(?:\(?([1-9][0-9])\)?\s?)?(?:((?:9\d|[2-9])\d{3})\-?(\d{4}))$/, (msg, match) => {
                                 const opts = {
                     reply_markup: JSON.stringify({
@@ -262,6 +262,7 @@ bot.on('callback_query', (callback_query) =>{
                         }),
                     };
                     bot.sendMessage(msg.from.id, "Confirma o endereço?",opts);
+                    });
                     bot.on('callback_query', (confirma3)=>{
                         const action = confirma3.data
                         const msg4 = confirma3.message
@@ -276,7 +277,6 @@ bot.on('callback_query', (callback_query) =>{
                             bot.sendMessage(msg4.chat.id, "Tente novamente mais tarde.");
                          };                 
                     })
-            });
             break;
         case 'Alterar para Boleto':
             bot.sendMessage(msg.chat.id, 'Mudamos sua forma de pagamento para boleto');
@@ -286,7 +286,7 @@ bot.on('callback_query', (callback_query) =>{
             break;
         case 'beleza':
             bot.sendMessage(msg.chat.id, 'Pode essa semana?');
-            bot.onText(/^[-a-z-A-Z]+$/, (msg, match) => {
+            bot.onText(/^[-a-s-A-S]+$/, (msg, match) => {
                 const opts = {
                     reply_markup: JSON.stringify({
                         inline_keyboard: [
@@ -310,6 +310,9 @@ bot.on('callback_query', (callback_query) =>{
                 if (action == "Segunda 12h"){
                     bot.sendMessage(msg5.chat.id, 'Agendamos nesse horário.');        
                     }
+                else if(action == "Segunda 18h"){
+                    bot.sendMessage(msg5.chat.id, 'Agendamos nesse horário.');        
+                }
                 });
             });
             break;
