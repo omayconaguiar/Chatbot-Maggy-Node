@@ -59,7 +59,7 @@ var messageSchema = new mongoose.Schema({
 
 var Message = mongoose.model('Messages', messageSchema);
 
-bot.onText(/^[A-Za-z0-9_.]+$/, (msg, match) => {
+bot.onText(/^[-a-z-A-Z]+$/, (msg, match) => {
     const opts = {
         reply_to_message_id: msg.message_id,
         reply_markup: JSON.stringify({
