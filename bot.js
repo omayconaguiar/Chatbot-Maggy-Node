@@ -62,7 +62,6 @@ var Message = mongoose.model('Messages', messageSchema);
 bot.on('message', (msg, match) => {
     const chatId = msg.chat.id;
     const opts = {
-        reply_to_message_id: msg.message_id,
         reply_markup: JSON.stringify({
             keyboard: [
                 ['consultar boleto'],
@@ -72,7 +71,7 @@ bot.on('message', (msg, match) => {
             ]
         })
     };
-    bot.sendMessage(chatId,'', opts);   
+    bot.sendMessage(chatId,'.', opts);   
 });
 
 bot.on('message', (msg, match) => {
@@ -305,7 +304,6 @@ bot.on('callback_query', (callback_query) =>{
                 };
                 bot.sendMessage(msg.from.id, 'Escolha uma das opções abaixo:', opts);    
 
-
                 bot.on('callback_query', function onCallbackQuery(confirma){
                     const action = confirma.data
                     const msg2 = confirma.message
@@ -313,17 +311,17 @@ bot.on('callback_query', (callback_query) =>{
                     if (action == "Segunda 12h"){
                         bot.sendMessage(msg2.chat.id, 'Agendamos nesse horário.');        
                     }
-                    else {
+                    else if(action == "Segunda 18h"){
                         bot.sendMessage(msg2.chat.id, 'Agendamos nesse horário.');        
                     }
                 })
             });
             break;
-            
+            default:
+            console.log(0);
+            break;
         }
     });
-
-  
     
     bot.on('message', (msg) => {
         //bem vindo
@@ -405,16 +403,16 @@ bot.on('callback_query', (callback_query) =>{
             bot.sendMessage(msg.chat.id, "Eu sou Maggy, a assistente virtual da mongeral! Em que posso ajudar?");
         } 
         else if(msg.text.toString().toLowerCase().includes(boleto)){
-            bot.sendMessage(msg.chat.id, "Está aqui seu boleto!");
+            bot.sendMessage(msg.chat.id, "Consulte aqui seu boleto em mongeral.");
         } 
         else if(msg.text.toString().toLowerCase().includes(dados)){
-            bot.sendMessage(msg.chat.id, "Está aqui seus dados!");
+            bot.sendMessage(msg.chat.id, "Mude os seus dados na Mongeral.");
         } 
         else if(msg.text.toString().toLowerCase().includes(pagamento)){
-            bot.sendMessage(msg.chat.id, "Está aqui sua forma de pagamento!");
+            bot.sendMessage(msg.chat.id, "Muda sua forma de realizar os pagamentos.");
         } 
         else if(msg.text.toString().toLowerCase().includes(outros)){
-            bot.sendMessage(msg.chat.id, "Está aqui os outros!");
+            bot.sendMessage(msg.chat.id, "Agende um horário que seja melhor pra você.");
         }  
         else if(msg.text.toString().toLowerCase().includes(um)){
             bot.sendMessage(msg.from.id, "");
@@ -453,6 +451,6 @@ bot.on('callback_query', (callback_query) =>{
             bot.sendMessage(msg.from.id, "");
         }
         else{
-            bot.sendMessage(msg.chat.id, "Erro!");
+            bot.sendMessage(msg.chat.id, "Erro! Não consegui entender sua mensagem, na dúvida siga as opções de teclado.");
         }         
     });
