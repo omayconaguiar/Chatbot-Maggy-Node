@@ -60,7 +60,6 @@ var messageSchema = new mongoose.Schema({
 var Message = mongoose.model('Messages', messageSchema);
 
 bot.on('message', (msg, match) => {
-    const chatId = msg.chat.id;
     const opts = {
         reply_markup: JSON.stringify({
             keyboard: [
@@ -71,7 +70,7 @@ bot.on('message', (msg, match) => {
             ]
         })
     };
-    bot.sendMessage(chatId,'.', opts);   
+    bot.sendMessage(msg.chat.id,'Verifique o menu para facilitar o contato.', opts);   
 });
 
 bot.on('message', (msg, match) => {
@@ -357,6 +356,7 @@ bot.on('callback_query', (callback_query) =>{
         var sim = "sim";
         var ok = "ok";
         var nao = "nao";
+        var start = "/start";
         if (msg.text.toString().toLowerCase().includes(oi)) {
             bot.sendMessage(msg.chat.id, "Eu sou Maggy, a assistente virtual da mongeral! Em que posso ajudar?");
         }        
@@ -417,6 +417,9 @@ bot.on('callback_query', (callback_query) =>{
         else if(msg.text.toString().toLowerCase().includes(um)){
             bot.sendMessage(msg.from.id, "");
         }
+        else if(msg.text.toString().toLowerCase().includes(start)){
+            bot.sendMessage(msg.from.id, "");
+        }        
         else if(msg.text.toString().toLowerCase().includes(dois)){
             bot.sendMessage(msg.from.id, "");
         }
