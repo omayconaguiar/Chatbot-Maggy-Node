@@ -269,7 +269,7 @@ bot.on('callback_query', (callback_query) =>{
                         if (action == "uhum"){
                             bot.sendMessage(msg4.chat.id, "Digite o número do complemento");
                             bot.onText(/^[0-9]{1,4}$/, (msg, match) => {
-                               bot.sendMessage(msg4.chat.id,'Mudamos seu endereco'); 
+                               bot.sendMessage(msg4.chat.id,'Mudamos seu endereço'); 
                         });
                         }
                         else if(action == 'Não'){
@@ -319,19 +319,31 @@ bot.on('callback_query', (callback_query) =>{
 bot.on('message', (msg) => {
     //bem vindo
     var oi = "oi";
+    var oi = "Oi";
     var eae = "eae";
+    var Eae = "Eae";
     var fala = "fala";
+    var Fala = "Fala";
     var como = "como";
+    var Como = "Como";
     var ola = "ola";
+    var Ola = "Ola";
     var mag = "mag";
+    var Mag = "Mag";
     var maggy = "maggy";
+    var Maggy = "Maggy";
+    var hey = "hey";
+    var Hey = "Hey";
+    var ei = "ei";
+    var Ei = "Ei";
+    var oie = "oie";
+    var Oie = "Oie";
+    var oii = "oii";
+    var Oii = "Oii";
+    var oiii = "oiii";
+    var Oiii = "Oiii";
     var tudo = "tudo";
     var ajuda = "ajuda";
-    var hey = "hey";
-    var ei = "ei";
-    var oie = "oie";
-    var oii = "oii";
-    var oiii = "oiii";
     //funcoes
     var boleto = "boleto";
     var dados = "dados";
@@ -357,19 +369,37 @@ bot.on('message', (msg) => {
     else if(msg.text.toString().toLowerCase().includes(eae)){
         bot.sendMessage(msg.chat.id, "Eu sou Maggy, a assistente virtual da mongeral! Em que posso ajudar?");
     } 
+    else if(msg.text.toString().toLowerCase().includes(Eae)){
+        bot.sendMessage(msg.chat.id, "Eu sou Maggy, a assistente virtual da mongeral! Em que posso ajudar?");
+    } 
     else if(msg.text.toString().toLowerCase().includes(como)){
+        bot.sendMessage(msg.chat.id, "Eu sou Maggy, a assistente virtual da mongeral! Em que posso ajudar?");
+    } 
+    else if(msg.text.toString().toLowerCase().includes(Como)){
         bot.sendMessage(msg.chat.id, "Eu sou Maggy, a assistente virtual da mongeral! Em que posso ajudar?");
     } 
     else if(msg.text.toString().toLowerCase().includes(fala)){
         bot.sendMessage(msg.chat.id, "Eu sou Maggy, a assistente virtual da mongeral! Em que posso ajudar?");
     } 
+    else if(msg.text.toString().toLowerCase().includes(Fala)){
+        bot.sendMessage(msg.chat.id, "Eu sou Maggy, a assistente virtual da mongeral! Em que posso ajudar?");
+    } 
     else if(msg.text.toString().toLowerCase().includes(ola)){
+        bot.sendMessage(msg.chat.id, "Eu sou Maggy, a assistente virtual da mongeral! Em que posso ajudar?");
+    } 
+    else if(msg.text.toString().toLowerCase().includes(Ola)){
         bot.sendMessage(msg.chat.id, "Eu sou Maggy, a assistente virtual da mongeral! Em que posso ajudar?");
     } 
     else if(msg.text.toString().toLowerCase().includes(mag)){
         bot.sendMessage(msg.chat.id, "Eu sou Maggy, a assistente virtual da mongeral! Em que posso ajudar?");
     } 
+    else if(msg.text.toString().toLowerCase().includes(Mag)){
+        bot.sendMessage(msg.chat.id, "Eu sou Maggy, a assistente virtual da mongeral! Em que posso ajudar?");
+    } 
     else if(msg.text.toString().toLowerCase().includes(maggy)){
+        bot.sendMessage(msg.chat.id, "Eu sou Maggy, a assistente virtual da mongeral! Em que posso ajudar?");
+    } 
+    else if(msg.text.toString().toLowerCase().includes(Maggy)){
         bot.sendMessage(msg.chat.id, "Eu sou Maggy, a assistente virtual da mongeral! Em que posso ajudar?");
     } 
     else if(msg.text.toString().toLowerCase().includes(tudo)){
@@ -381,19 +411,31 @@ bot.on('message', (msg) => {
     else if(msg.text.toString().toLowerCase().includes(hey)){
         bot.sendMessage(msg.chat.id, "Eu sou Maggy, a assistente virtual da mongeral! Em que posso ajudar?");
     } 
+    else if(msg.text.toString().toLowerCase().includes(Hey)){
+        bot.sendMessage(msg.chat.id, "Eu sou Maggy, a assistente virtual da mongeral! Em que posso ajudar?");
+    } 
     else if(msg.text.toString().toLowerCase().includes(ei)){
+        bot.sendMessage(msg.chat.id, "Eu sou Maggy, a assistente virtual da mongeral! Em que posso ajudar?");
+    } 
+    else if(msg.text.toString().toLowerCase().includes(Ei)){
         bot.sendMessage(msg.chat.id, "Eu sou Maggy, a assistente virtual da mongeral! Em que posso ajudar?");
     } 
     else if(msg.text.toString().toLowerCase().includes(oie)){
         bot.sendMessage(msg.chat.id, "Eu sou Maggy, a assistente virtual da mongeral! Em que posso ajudar?");
     } 
+    else if(msg.text.toString().toLowerCase().includes(Oie)){
+        bot.sendMessage(msg.chat.id, "Eu sou Maggy, a assistente virtual da mongeral! Em que posso ajudar?");
+    } 
     else if(msg.text.toString().toLowerCase().includes(oii)){
         bot.sendMessage(msg.chat.id, "Eu sou Maggy, a assistente virtual da mongeral! Em que posso ajudar?");
     } 
-    else if(msg.text.toString().toLowerCase().includes(oiii)){
+    else if(msg.text.toString().toLowerCase().includes(Oii)){
         bot.sendMessage(msg.chat.id, "Eu sou Maggy, a assistente virtual da mongeral! Em que posso ajudar?");
     } 
     else if(msg.text.toString().toLowerCase().includes(oiii)){
+        bot.sendMessage(msg.chat.id, "Eu sou Maggy, a assistente virtual da mongeral! Em que posso ajudar?");
+    } 
+    else if(msg.text.toString().toLowerCase().includes(Oiii)){
         bot.sendMessage(msg.chat.id, "Eu sou Maggy, a assistente virtual da mongeral! Em que posso ajudar?");
     } 
     else if(msg.text.toString().toLowerCase().includes(boleto)){
@@ -412,7 +454,7 @@ bot.on('message', (msg) => {
         bot.sendMessage(msg.from.id, "");
     }
     else if(msg.text.toString().toLowerCase().includes(start)){
-        bot.sendMessage(msg.from.id, "");
+        bot.sendMessage(msg.from.id, "Inicie uma conversa com a Maggy");
     }        
     else if(msg.text.toString().toLowerCase().includes(dois)){
         bot.sendMessage(msg.from.id, "");
